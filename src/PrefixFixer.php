@@ -3,7 +3,6 @@
 namespace Rector\Prefixer;
 
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 use Symplify\PackageBuilder\FileSystem\SmartFileInfo;
 
 final class PrefixFixer
@@ -30,7 +29,7 @@ final class PrefixFixer
      */
     public function prefixServicesInConfigs(): void
     {
-        $this->stringReplacer->replaceInsideFileInfos(
+        $this->stringReplacer->replaceInsideSource(
             $this->findYamlAndNeonFiles(['config']),
             '#((?:\w+\\\\{1,2})(?:\w+\\\\{0,2})+)#',
             'RectorPrefixed\\\\$1'
@@ -45,7 +44,7 @@ final class PrefixFixer
      */
     public function unprefixRectorCore(): void
     {
-        $this->stringReplacer->replaceInsideFileInfos($this->findCoreFiles(), '#RectorPrefixed\\\\Rector#', 'Rector');
+        $this->stringReplacer->replaceInsideSource($this->findCoreFiles(), '#RectorPrefixed\\\\Rector#', 'Rector');
     }
 
     /**
@@ -54,7 +53,7 @@ final class PrefixFixer
      */
     public function unprefixContainerDump(): void
     {
-        $this->stringReplacer->replaceInsideFileInfos(
+        $this->stringReplacer->replaceInsideSource(
             $this->findCoreFiles(),
             '#use Symfony#',
             'use RectorPrefixed\\Symfony'
@@ -66,7 +65,7 @@ final class PrefixFixer
      */
     public function unprefixStrings(): void
     {
-        $this->stringReplacer->replaceInsideFileInfos($this->findCoreFilesWithoutVendor(), '#RectorPrefixed\\\\#');
+        $this->stringReplacer->replaceInsideSource($this->findCoreFilesWithoutVendor(), '#RectorPrefixed\\\\#');
     }
 
     /**
@@ -78,7 +77,7 @@ final class PrefixFixer
     {
         $fileInfo = new SmartFileInfo($this->from . '/vendor/nette/di/src/DI/Compiler.php');
 
-        $this->stringReplacer->replaceInsideFileInfos($fileInfo, '#|Nette\\\\DI#', 'RectorPrefixed\\\\Nette\\\\DI');
+        $this->stringReplacer->replaceInsideSource($fileInfo, '#|Nette\\\\DI#', 'RectorPrefixed\\\\Nette\\\\DI');
     }
 
     /**
@@ -97,51 +96,38 @@ final class PrefixFixer
         $fileInfo = new SmartFileInfo(
             $this->from . '/packages/Symfony/src/Bridge/DefaultAnalyzedSymfonyApplicationContainer.php'
         );
-        $this->stringReplacer->replaceInsideFileInfos($fileInfo, '#RectorPrefixed\\\\App\\\\Kernel#', 'App\\Kernel');
+        $this->stringReplacer->replaceInsideSource($fileInfo, '#RectorPrefixed\\\\App\\\\Kernel#', 'App\\Kernel');
 
         $finder = Finder::create()
             ->in($this->from . '/packages/Symfony/src/Bridge')
             ->files();
 
-        $fileInfos = iterator_to_array($finder->getIterator());
-
-        $this->stringReplacer->replaceInsideFileInfos(
-            $fileInfos,
+        $this->stringReplacer->replaceInsideSource(
+            $finder,
             '#RectorPrefixed\\Symfony\\Component#',
             'Symfony\\Component'
         );
     }
 
-    /**
-     * @return SplFileInfo[]
-     */
-    private function findCoreFiles(): array
+    private function findCoreFiles(): Finder
     {
-        $finder = Finder::create()->name('#\.(php|yml|yaml)$#')
+        return Finder::create()->name('#\.(php|yml|yaml)$#')
             ->in($this->from)
             ->files();
-
-        return iterator_to_array($finder->getIterator());
     }
 
-    /**
-     * @return SplFileInfo[]
-     */
-    private function findCoreFilesWithoutVendor(): array
+    private function findCoreFilesWithoutVendor(): Finder
     {
-        $finder = Finder::create()->name('#\.(php|yml|yaml)$#')
+        return Finder::create()->name('#\.(php|yml|yaml)$#')
             ->in($this->from)
             ->files()
             ->notPath('vendor');
-
-        return iterator_to_array($finder->getIterator());
     }
 
     /**
      * @param string[] $exclude
-     * @return SplFileInfo[]
      */
-    private function findYamlAndNeonFiles(array $exclude = []): array
+    private function findYamlAndNeonFiles(array $exclude = []): Finder
     {
         $finder = Finder::create()->name('#\.(yml|yaml|neon)$#')
             ->in($this->from)
@@ -153,6 +139,6 @@ final class PrefixFixer
             $finder = $finder->notPath($singleExclude);
         }
 
-        return iterator_to_array($finder->getIterator());
+        return $finder;
     }
 }

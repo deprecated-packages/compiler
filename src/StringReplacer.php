@@ -4,16 +4,23 @@ namespace Rector\Prefixer;
 
 use Nette\Utils\FileSystem;
 use Nette\Utils\Strings;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 final class StringReplacer
 {
     /**
-     * @param SplFileInfo|SplFileInfo[] $fileInfos
+     * @param Finder|SplFileInfo|SplFileInfo[] $source
      */
-    public function replaceInsideFileInfos($fileInfos, string $pattern, string $replacement = ''): void
+    public function replaceInsideSource($source, string $pattern, string $replacement = ''): void
     {
-        $fileInfos = is_iterable($fileInfos) ? $fileInfos : [$fileInfos];
+        if ($source instanceof Finder) {
+            $fileInfos = iterator_to_array($source->getIterator());
+        } elseif ($source instanceof SplFileInfo) {
+            $fileInfos = [$source];
+        } else {
+            $fileInfos = $source;
+        }
 
         foreach ($fileInfos as $fileInfo) {
             $content = $fileInfo->getContents();

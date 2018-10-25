@@ -5,7 +5,6 @@ namespace Rector\Prefixer\Worker;
 use Rector\Prefixer\Contract\Worker\WorkerInterface;
 use Rector\Prefixer\StringReplacer;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 final class PrefixConfigsWorker implements WorkerInterface
 {
@@ -27,7 +26,7 @@ final class PrefixConfigsWorker implements WorkerInterface
     {
         $configFiles = $this->findYamlAndNeonFiles($from, ['config']);
 
-        $this->stringReplacer->replaceInsideFileInfos(
+        $this->stringReplacer->replaceInsideSource(
             $configFiles,
             '#((?:\w+\\\\{1,2})(?:\w+\\\\{0,2})+)#',
             'RectorPrefixed\\\\$1'
@@ -41,9 +40,8 @@ final class PrefixConfigsWorker implements WorkerInterface
 
     /**
      * @param string[] $exclude
-     * @return SplFileInfo[]
      */
-    private function findYamlAndNeonFiles(string $from, array $exclude = []): array
+    private function findYamlAndNeonFiles(string $from, array $exclude = []): Finder
     {
         $finder = Finder::create()->name('#\.(yml|yaml|neon)$#')
             ->in($from)
@@ -55,6 +53,6 @@ final class PrefixConfigsWorker implements WorkerInterface
             $finder = $finder->notPath($singleExclude);
         }
 
-        return iterator_to_array($finder->getIterator());
+        return $finder;
     }
 }
