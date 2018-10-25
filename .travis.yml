@@ -9,7 +9,7 @@ env:
 
 install:
     - composer install
-    - composer create-project rector/rector FROM
+    - composer create-project rector/rector $FROM
 
 script:
     # static checks
@@ -19,7 +19,7 @@ script:
     - bin/console prefix
 
     # test generated version
-    - FROM/bin/rector
+    - $FROM/bin/rector
 
 notifications:
     email: false
