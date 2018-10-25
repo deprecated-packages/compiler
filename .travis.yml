@@ -1,0 +1,11 @@
+language: php
+
+php:
+    - 7.1
+    - 7.2
+
+script:
+    - bin/console prefix
+
+notifications:
+    email: false
