@@ -9,7 +9,7 @@ env:
 
 install:
     - composer install
-    - composer create-project rectorphp/rector FROM
+    - composer create-project rector/rector FROM
 
 script:
     # static checks
