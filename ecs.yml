@@ -1,0 +1,21 @@
+imports:
+    - { resource: 'vendor/symplify/easy-coding-standard/config/psr2.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/php71.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/symplify.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/common.yml' }
+    - { resource: 'vendor/symplify/easy-coding-standard/config/clean-code.yml' }
+
+services:
+    SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff: ~
+    Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+        maxCognitiveComplexity: 8
+
+parameters:
+    exclude_files:
+        - 'templates'
+
+    skip:
+        SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff.UnusedParameter:
+            # parameters required by interface
+            - '*/Worker/*'
+            - 'src/Command/*Command.php'

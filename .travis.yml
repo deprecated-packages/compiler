@@ -4,11 +4,22 @@ php:
     - 7.1
     - 7.2
 
+env:
+    - FROM="from"
+
 install:
     - composer install
+    - composer create-project rectorphp/rector FROM
 
 script:
+    # static checks
+    - composer check-cs
+    - composer phpstan
+
     - bin/console prefix
+
+    # test generated version
+    - FROM/bin/rector
 
 notifications:
     email: false

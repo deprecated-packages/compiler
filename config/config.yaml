@@ -1,3 +1,10 @@
+parameters:
+    env(FROM): "%kernel.project_dir%/../rector" # default value
+    from: "%env(FROM)%"
+    env(TO): "%kernel.project_dir%/../build-rector-prefixed" # default value
+    to: "%env(TO)%"
+    templates: "%kernel.project_dir%/templates"
+
 services:
     _defaults:
         public: true
@@ -7,3 +14,13 @@ services:
         resource: "../src"
 
     Symfony\Component\Console\Application: ~
+
+    # Symfony\Console
+    Symfony\Component\Console\Style\SymfonyStyle: ~
+    Symfony\Component\Console\Input\ArgvInput: ~
+    Symfony\Component\Console\Input\InputInterface:
+        alias: 'Symfony\Component\Console\Input\ArgvInput'
+
+    Symfony\Component\Console\Output\ConsoleOutput: ~
+    Symfony\Component\Console\Output\OutputInterface:
+        alias: 'Symfony\Component\Console\Output\ConsoleOutput'

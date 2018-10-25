@@ -2,7 +2,7 @@
 
 use Rector\Prefixer\DependencyInjection\PrefixerKernel;
 
-$possibleConfigPath = getcwd() . '/prefixer.yml';
+$possibleConfigPath = __DIR__ . '/../prefixer.yaml';
 
 if (! file_exists($possibleConfigPath)) {
     throw new LogicException(sprintf('Unable to find "%s" config, add it.', $possibleConfigPath));

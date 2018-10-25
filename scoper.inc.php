@@ -1,11 +1,15 @@
 <?php declare(strict_types=1);
 
+// @see https://github.com/humbug/php-scoper
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Isolated\Symfony\Component\Finder\Finder;
 
+$from = getenv('FROM');
+
 return [
-    'prefix' => 'RectorPrefixed',
+    'prefix' => getenv('PREFIX'),
     'finders' => [
         Finder::create()
             ->files()
@@ -14,11 +18,11 @@ return [
             ->notName('#LICENSE|.*\\.md|.*\\.dist|Makefile|composer\\.json|composer\\.lock|.*\\.sh#')
             // depends on PHPUnit that is not part of the prefixed package
             ->notName('#AbstractRectorTestCase\\.php#')
-            ->in(__DIR__ .'/bin')
-            ->in(__DIR__ .'/config')
-            ->in(__DIR__ .'/packages')
-            ->in(__DIR__ .'/src')
-            ->in(__DIR__ .'/vendor')
+            ->in($from .'/bin')
+            ->in($from .'/config')
+            ->in($from .'/packages')
+            ->in($from .'/src')
+            ->in($from .'/vendor')
             ->exclude([
                 'docs',
                 'Tests',
@@ -33,19 +37,19 @@ return [
         Finder::create()->append([
             'composer.json',
             // Fixes non-standard php-cs-fixer tests in /src
-            __DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php',
+            $from . '/vendor/friendsofphp/php-cs-fixer/tests/TestCase.php',
             // Files dependencies in prod vendor
-            __DIR__ . '/vendor/humbug/php-scoper/src/functions.php',
-            __DIR__ . '/vendor/tracy/tracy/src/shortcuts.php',
+            $from . '/vendor/humbug/php-scoper/src/functions.php',
+            $from . '/vendor/tracy/tracy/src/shortcuts.php',
             // dependency for "composer dump"
-            __DIR__ . '/vendor/composer/installed.json'
+            $from . '/vendor/composer/installed.json'
         ]),
         // 'whitelist' - be careful, this adds aliases to end of each whitelisted class
 
         // Fixes non-standard php-cs-fixer tests in /src:
-        // "Could not scan for classes inside "/var/www/rector/build/vendor/friendsofphp/php-cs-fixer/tests/Test/AbstractFixerTestCase.php" which does not appear to be a file nor a folder"
+        // "Could not scan for classes inside "../vendor/friendsofphp/php-cs-fixer/tests/Test/AbstractFixerTestCase.php" which does not appear to be a file nor a folder"
         Finder::create()
             ->files()
-            ->in(__DIR__ . '/vendor/friendsofphp/php-cs-fixer/tests/Test')
+            ->in($from . '/vendor/friendsofphp/php-cs-fixer/tests/Test')
     ],
 ];
