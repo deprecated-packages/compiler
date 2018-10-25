@@ -3,6 +3,7 @@
 namespace Rector\Prefixer\Command;
 
 use Rector\Prefixer\Contract\Worker\WorkerInterface;
+use Rector\Prefixer\Exception\ConfigurationException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -31,7 +32,9 @@ final class PrefixCommand extends Command
     public function __construct(array $workers, string $from, string $to)
     {
         parent::__construct();
-        $this->workers = $workers;
+
+        $this->addWorkers($workers);
+
         $this->from = $from;
         $this->to = $to;
     }
@@ -46,6 +49,27 @@ final class PrefixCommand extends Command
     {
         foreach ($this->workers as $worker) {
             $worker->work($this->from, $this->to);
+        }
+    }
+
+    /**
+     * @param WorkerInterface[] $workers
+     */
+    private function addWorkers(array $workers): void
+    {
+        foreach ($workers as $worker) {
+            if (! isset($this->workers[$worker->getPriority()])) {
+                $this->workers[$worker->getPriority()] = $worker;
+                ksort($this->workers);
+                continue;
+            }
+
+            throw new ConfigurationException(sprintf(
+                'Conflicting worker priority %d already exists: %s and %s',
+                $worker->getPriority(),
+                get_class($worker),
+                get_class($this->workers[$worker->getPriority()])
+            ));
         }
     }
 }

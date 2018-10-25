@@ -12,6 +12,7 @@ services:
 
     Rector\Prefixer\:
         resource: "../src"
+        exclude: "../src/Exception"
 
     Symfony\Component\Console\Application: ~
 
