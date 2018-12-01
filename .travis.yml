@@ -2,24 +2,21 @@ language: php
 
 php:
     - 7.1
-    - 7.2
-
-env:
-    - FROM="from"
 
 install:
+    # install local dependencies
     - composer install
-    - composer create-project rector/rector $FROM
 
 script:
     # static checks
     - composer check-cs
     - composer phpstan
 
-    - bin/console prefix
+    # build prefixed version
+    - bin/console compile
 
     # test generated version
-    - $FROM/bin/rector
+    - tmp/rector.phar -vvv
 
 notifications:
     email: false

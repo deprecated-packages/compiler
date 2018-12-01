@@ -3,16 +3,16 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Psr\Container\ContainerInterface;
+use Rector\Prefixer\DependencyInjection\PrefixerKernel;
 use Symfony\Component\Console\Application;
-use Symplify\PackageBuilder\Console\ThrowableRenderer;
 
-try {
-    /** @var ContainerInterface $container */
-    $container = require_once __DIR__ . '/container.php';
+$kernel = new PrefixerKernel();
+$kernel->boot();
 
-    $application = $container->get(Application::class);
-    $application->run();
-} catch (Throwable $throwable) {
-    (new ThrowableRenderer())->render($throwable);
-}
+// this is require to keep CLI verbosity independent on AppKernel dev/prod mode
+putenv('SHELL_VERBOSITY=0');
+
+$container = $kernel->getContainer();
+
+$application = $container->get(Application::class);
+$application->run();
