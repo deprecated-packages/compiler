@@ -109,21 +109,6 @@ final class PrefixFixer
         );
     }
 
-    private function findCoreFiles(): Finder
-    {
-        return Finder::create()->name('#\.(php|yml|yaml)$#')
-            ->in($this->from)
-            ->files();
-    }
-
-    private function findCoreFilesWithoutVendor(): Finder
-    {
-        return Finder::create()->name('#\.(php|yml|yaml)$#')
-            ->in($this->from)
-            ->files()
-            ->notPath('vendor');
-    }
-
     /**
      * @param string[] $exclude
      */
@@ -140,5 +125,20 @@ final class PrefixFixer
         }
 
         return $finder;
+    }
+
+    private function findCoreFiles(): Finder
+    {
+        return Finder::create()->name('#\.(php|yml|yaml)$#')
+            ->in($this->from)
+            ->files();
+    }
+
+    private function findCoreFilesWithoutVendor(): Finder
+    {
+        return Finder::create()->name('#\.(php|yml|yaml)$#')
+            ->in($this->from)
+            ->files()
+            ->notPath('vendor');
     }
 }

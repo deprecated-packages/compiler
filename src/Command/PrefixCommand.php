@@ -12,9 +12,9 @@ use Symplify\PackageBuilder\Console\Command\CommandNaming;
 final class PrefixCommand extends Command
 {
     /**
-     * @var array|WorkerInterface[]
+     * @var string
      */
-    private $workers = [];
+    private $to;
 
     /**
      * @var string
@@ -22,9 +22,9 @@ final class PrefixCommand extends Command
     private $from;
 
     /**
-     * @var string
+     * @var array|WorkerInterface[]
      */
-    private $to;
+    private $workers = [];
 
     /**
      * @param WorkerInterface[] $workers
