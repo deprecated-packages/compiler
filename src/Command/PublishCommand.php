@@ -14,17 +14,17 @@ final class PublishCommand extends Command
     /**
      * @var string
      */
-    private $to;
+    private $buildDirectory;
 
     /**
      * @var SymfonyStyle
      */
     private $symfonyStyle;
 
-    public function __construct(string $to, SymfonyStyle $symfonyStyle)
+    public function __construct(string $buildDirectory, SymfonyStyle $symfonyStyle)
     {
         parent::__construct();
-        $this->to = $to;
+        $this->buildDirectory = $buildDirectory;
         $this->symfonyStyle = $symfonyStyle;
     }
 
@@ -36,7 +36,33 @@ final class PublishCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->symfonyStyle->error('"publish" command needs to be implemented');
+        $this->symfonyStyle->error(sprintf(
+            '"publish" of "%s" directory to "%s" repository command needs to be implemented',
+            $this->buildDirectory,
+            'https://github.com/rectorphp/rector-prefixed'
+        ));
+
+        // bash
+//        cd build
+//
+        # init non-existing .git or fetch existing one
+        //if [ ! -d .git ]; then
+//    git init
+//    # travis needs token to push
+//    if [ $TRAVIS == true ]; then
+//        git remote add -f origin https://$GITHUB_TOKEN@github.com/rectorphp/rector-prefixed.git
+//    else
+//        git remote add -f origin git@github.com:rectorphp/rector-prefixed.git
+//    fi
+//
+        //else
+//    git fetch origin
+        //fi
+//
+        //git add .
+//    git commit -m "rebuild prefixed Rector"
+        //# needs to be force pushed to delete old files
+        //git push origin master -f
 
         return ShellCode::ERROR;
     }

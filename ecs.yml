@@ -7,15 +7,10 @@ imports:
 
 services:
     SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff: ~
-    Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
-        maxCognitiveComplexity: 8
 
 parameters:
-    exclude_files:
-        - 'templates'
-
     skip:
         SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff.UnusedParameter:
             # parameters required by interface
-            - '*/Worker/*'
             - 'src/Command/*Command.php'
+            - 'src/Process/ProcessRunner.php'

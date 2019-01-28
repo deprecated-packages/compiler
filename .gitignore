@@ -1,2 +1,6 @@
 /vendor
 composer.lock
+
+# default directory for prefixed version
+/tmp
+.box_dump
