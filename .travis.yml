@@ -16,7 +16,7 @@ script:
     - bin/console compile
 
     # test generated version
-    - tmp/rector.phar -vvv
+    - php rector.phar -vvv
 
 notifications:
     email: false
