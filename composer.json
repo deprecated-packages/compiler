@@ -18,6 +18,7 @@
         "symplify/easy-coding-standard": "^5.3",
         "tracy/tracy": "^2.5"
     },
+    "bin": "bin/console",
     "autoload": {
         "psr-4": {
             "Rector\\Prefixer\\": "src"
