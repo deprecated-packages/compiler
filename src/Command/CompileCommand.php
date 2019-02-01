@@ -111,10 +111,11 @@ final class CompileCommand extends Command
 
         $this->composerJsonCleaner->clean($this->buildDirectory . '/composer.json');
 
-//        $this->processRunner->run(
-//            ['composer', 'update', '--no-dev', '--classmap-authoritative'],
-//            $this->buildDirectory
-//        );
+        // needed, /vendor is missing without this
+        $this->processRunner->run(
+            ['composer', 'update', '--no-dev', '--classmap-authoritative'],
+            $this->buildDirectory
+        );
 
         // remove conflicting package, not sure how it got here
         $this->processRunner->run(['rm', '-rf', 'vendor/symfony/polyfill-php70'], $this->buildDirectory);

@@ -2,5 +2,9 @@
     "compactors": [
         "KevinGH\\Box\\Compactor\\PhpScoper"
     ],
-    "output": "../../rector.phar"
+    "output": "../../rector.phar",
+    "files": [
+        "bin/bootstrap.php",
+        "bin/container.php"
+    ]
 }
