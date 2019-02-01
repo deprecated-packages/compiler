@@ -128,7 +128,7 @@ final class CompileCommand extends Command
     private function buildPrefixedPhar(): void
     {
         $this->symfonyStyle->note('Building prefixed rector.phar');
-        $boxCommand = ['vendor/bin/box', 'compile', '--config', 'build/box.json'];
+        $boxCommand = ['../../vendor/bin/box', 'compile', '--config', '../../build/box.json'];
         if ($this->symfonyStyle->isDebug()) {
             $boxCommand[] = '--debug';
         }
