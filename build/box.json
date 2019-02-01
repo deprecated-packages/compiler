@@ -1,7 +1,6 @@
 {
     "alias": "rector.phar",
     "banner": false,
-    "base-path": "tmp/build",
     "check-requirements": false,
     "compactors": [
         "KevinGH\\Box\\Compactor\\PhpScoper"

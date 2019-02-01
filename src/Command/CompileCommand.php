@@ -133,6 +133,6 @@ final class CompileCommand extends Command
             $boxCommand[] = '--debug';
         }
 
-        $this->processRunner->run($boxCommand);
+        $this->processRunner->run($boxCommand, $this->buildDirectory);
     }
 }
