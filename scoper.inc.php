@@ -16,9 +16,8 @@ return [
                 return $content;
             }
 
-            return str_replace('use function Safe\\', 'use function ', $content);
+            return preg_replace('#^use function (.*?)?Safe\\#m', 'use function ', $content);
         },
-
 
         // correct paths inside phar, due to inner autoload.php path
         function (string $filePath, string $prefix, string $content): string {
