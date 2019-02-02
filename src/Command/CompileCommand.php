@@ -124,6 +124,7 @@ final class CompileCommand extends Command
     private function buildPrefixedPhar(): void
     {
         $this->processRunner->run(['cp', 'box.json', $this->buildDirectory . '/box.json']);
+        $this->processRunner->run(['cp', 'scoper.inc.php', $this->buildDirectory . '/scoper.inc.php']);
 
         $this->symfonyStyle->note('Building prefixed rector.phar');
         $boxCommand = ['vendor/bin/box', 'compile', '--config', 'box.json', '--working-dir', $this->buildDirectory];
