@@ -7,6 +7,10 @@ install:
     # install local dependencies
     - composer install
 
+before_scripts:
+    # exit when any command fails
+    - set -e
+
 script:
     # static checks
     - composer check-cs
