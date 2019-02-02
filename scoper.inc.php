@@ -24,15 +24,11 @@ return [
 
         // remove Safe\function prefix, since it breaks autoload
         function (string $filePath, string $prefix, string $content): string {
-            if (! Strings::match($filePath, '#\.php$#')) {
+            if (! in_array($filePath, ['bin/bootstrap.php', 'bin/container.php'])) {
                 return $content;
             }
 
-            if (in_array($filePath, ['bin/bootstrap.php', 'bin/container.php'])) {
-                $content = str_replace("__DIR__ . '/..", "'phar://rector.phar", $content);
-            }
-
-            return Strings::replace($content, '#^use function (.*?)?Safe\\#', 'use function ');
+            return str_replace("__DIR__ . '/..", "'phar://rector.phar", $content);
         },
 
         // change vendor import "packages/NodeTypeResolver/config/config.yml" to phar path
