@@ -10,13 +10,18 @@ return [
     'patchers' => [
         // in phar __DIR__ is not current directory, but root one
 
+        // remove Safe\function prefix, since it breaks autoload
+        function (string $filePath, string $prefix, string $content): string {
+            return str_replace('use function Safe\\', 'use function ', $content);
+        },
+
         // correct paths inside phar, due to inner autoload.php path
         function (string $filePath, string $prefix, string $content): string {
             if (! in_array($filePath, ['bin/bootstrap.php', 'bin/container.php'])) {
                 return $content;
             }
 
-            return str_replace('__DIR__ . \'/..', '\'phar://rector.phar', $content);
+            return str_replace("__DIR__ . '/..", "'phar://rector.phar", $content);
         },
 
         // change vendor import "packages/NodeTypeResolver/config/config.yml" to phar path
