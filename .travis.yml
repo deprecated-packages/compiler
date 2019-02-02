@@ -8,6 +8,9 @@ install:
     - composer install
 
 script:
+    # report phar errors
+    - set -e
+
     # static checks
     - composer check-cs
     - composer phpstan
