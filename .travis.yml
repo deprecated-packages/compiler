@@ -7,10 +7,6 @@ install:
     # install local dependencies
     - composer install
 
-before_scripts:
-    # exit when any command fails
-    - set -e
-
 script:
     # static checks
     - composer check-cs
@@ -19,8 +15,8 @@ script:
     # build prefixed version
     - bin/console compile
 
-    # test generated version
-    - php rector.phar -vvv
+    # test generated version; the "|| ..." part is to fail travis, it passes silently on error without
+    - php rector.phar -vvv || { echo 'rector.phar failed'; exit 1; }
 
 notifications:
     email: false
