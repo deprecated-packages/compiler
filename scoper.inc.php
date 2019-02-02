@@ -16,7 +16,7 @@ return [
                 return $content;
             }
 
-            return preg_replace('#^use function (.*?)?Safe\\#m', 'use function ', $content);
+            return preg_replace('#^use function (.*?)?Safe\\#', 'use function ', $content);
         },
 
         // correct paths inside phar, due to inner autoload.php path
