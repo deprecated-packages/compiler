@@ -4,7 +4,6 @@ namespace Rector\Prefixer\Command;
 
 use Rector\Prefixer\Composer\ComposerJsonCleaner;
 use Rector\Prefixer\Process\ProcessRunner;
-use function Safe\sprintf;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
