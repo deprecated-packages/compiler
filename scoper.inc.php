@@ -1,8 +1,11 @@
 <?php declare(strict_types=1);
 
 // @see https://github.com/humbug/php-scoper
-// require_once __DIR__ . '/vendor/autoload.php';
-// use Isolated\Symfony\Component\Finder\Finder;
+
+// this file will be copied 2 dirs in, so ../../ is needed to get back to root
+use Nette\Utils\Strings;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 return [
     'prefix' => null,
@@ -10,22 +13,26 @@ return [
     'patchers' => [
         // in phar __DIR__ is not current directory, but root one
 
-        // remove Safe\function prefix, since it breaks autoload
-        function (string $filePath, string $prefix, string $content): string {
-            if (preg_match('#\.php$#', $filePath) === false) {
-                return $content;
-            }
-
-            return preg_replace('#^use function (.*?)?Safe\\#', 'use function ', $content);
-        },
-
         // correct paths inside phar, due to inner autoload.php path
         function (string $filePath, string $prefix, string $content): string {
             if (! in_array($filePath, ['bin/bootstrap.php', 'bin/container.php'])) {
                 return $content;
             }
 
-            return str_replace("__DIR__ . '/..", "'phar://rector.phar", $content);
+            return str_replace('__DIR__ . \'/..', '\'phar://rector.phar', $content);
+        },
+
+        // remove Safe\function prefix, since it breaks autoload
+        function (string $filePath, string $prefix, string $content): string {
+            if (! Strings::match($filePath, '#\.php$#')) {
+                return $content;
+            }
+
+            if (in_array($filePath, ['bin/bootstrap.php', 'bin/container.php'])) {
+                $content = str_replace("__DIR__ . '/..", "'phar://rector.phar", $content);
+            }
+
+            return Strings::replace($content, '#^use function (.*?)?Safe\\#', 'use function ');
         },
 
         // change vendor import "packages/NodeTypeResolver/config/config.yml" to phar path
