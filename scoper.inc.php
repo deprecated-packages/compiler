@@ -12,8 +12,13 @@ return [
 
         // remove Safe\function prefix, since it breaks autoload
         function (string $filePath, string $prefix, string $content): string {
+            if (preg_match('#\.php$#', $filePath) === false) {
+                return $content;
+            }
+
             return str_replace('use function Safe\\', 'use function ', $content);
         },
+
 
         // correct paths inside phar, due to inner autoload.php path
         function (string $filePath, string $prefix, string $content): string {
