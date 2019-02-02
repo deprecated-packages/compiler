@@ -2,7 +2,7 @@
     "compactors": [
         "KevinGH\\Box\\Compactor\\PhpScoper"
     ],
-    "output": "../../../rector.phar",
+    "output": "rector.phar",
     "directories": [
         "bin",
         "config",
