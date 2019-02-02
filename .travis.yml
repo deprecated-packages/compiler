@@ -4,13 +4,9 @@ php:
     - 7.1
 
 install:
-    # install local dependencies
     - composer install
 
 script:
-    # report phar errors
-    - set -e
-
     # static checks
     - composer check-cs
     - composer phpstan
