@@ -9,5 +9,6 @@
         "packages",
         "src",
         "vendor"
-    ]
+    ],
+    "php-scoper": "../../build/scoper.inc.php"
 }

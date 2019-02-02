@@ -2,10 +2,7 @@
 
 // @see https://github.com/humbug/php-scoper
 
-// this file will be copied 2 dirs in, so ../../ is needed to get back to root
-use Nette\Utils\Strings;
-
-require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 return [
     'prefix' => null,
