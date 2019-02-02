@@ -16,7 +16,7 @@ script:
     - bin/console compile
 
     # test generated version; the "|| ..." part is to fail travis, it passes silently on error without
-    - php rector.phar -vvv || { echo 'rector.phar failed'; exit 1; }
+    - ./rector.phar -vvv || { echo 'rector.phar failed'; exit 1; }
 
 notifications:
     email: false
