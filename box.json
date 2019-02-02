@@ -10,5 +10,5 @@
         "src",
         "vendor"
     ],
-    "php-scoper": "../../build/scoper.inc.php"
+    "php-scoper": "../../scoper.inc.php"
 }
