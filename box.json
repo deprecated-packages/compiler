@@ -1,0 +1,13 @@
+{
+    "compactors": [
+        "KevinGH\\Box\\Compactor\\PhpScoper"
+    ],
+    "output": "../../rector.phar",
+    "directories": [
+        "bin",
+        "config",
+        "packages",
+        "src",
+        "vendor"
+    ]
+}

@@ -4,7 +4,6 @@ namespace Rector\Prefixer\Command;
 
 use Rector\Prefixer\Composer\ComposerJsonCleaner;
 use Rector\Prefixer\Process\ProcessRunner;
-use function Safe\sprintf;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -107,15 +106,11 @@ final class CompileCommand extends Command
         $this->processRunner->run(['git', 'checkout', '--force', $version], $this->buildDirectory);
 
         // runs on composer update bellow - see https://github.com/dg/composer-cleaner
-        $this->symfonyStyle->note('Cleaning vendor and composer.json');
-
-        $this->processRunner->run(
-            ['composer', 'require', '--no-update', 'dg/composer-cleaner:^2.0'],
-            $this->buildDirectory
-        );
+        $this->symfonyStyle->note('Preparing composer.json');
 
         $this->composerJsonCleaner->clean($this->buildDirectory . '/composer.json');
 
+        // needed, /vendor is missing without this
         $this->processRunner->run(
             ['composer', 'update', '--no-dev', '--classmap-authoritative'],
             $this->buildDirectory
@@ -127,8 +122,11 @@ final class CompileCommand extends Command
 
     private function buildPrefixedPhar(): void
     {
+        $this->processRunner->run(['cp', 'box.json', $this->buildDirectory . '/box.json']);
+        $this->processRunner->run(['cp', 'scoper.inc.php', $this->buildDirectory . '/scoper.inc.php']);
+
         $this->symfonyStyle->note('Building prefixed rector.phar');
-        $boxCommand = ['vendor/bin/box', 'compile', '--config', 'build/box.json'];
+        $boxCommand = ['vendor/bin/box', 'compile', '--config', 'box.json', '--working-dir', $this->buildDirectory];
         if ($this->symfonyStyle->isDebug()) {
             $boxCommand[] = '--debug';
         }

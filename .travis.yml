@@ -8,6 +8,9 @@ install:
     - composer install
 
 script:
+    # report phar errors
+    - set -e
+
     # static checks
     - composer check-cs
     - composer phpstan
@@ -15,8 +18,8 @@ script:
     # build prefixed version
     - bin/console compile
 
-    # test generated version
-    - tmp/rector.phar -vvv
+    # test generated version; the "|| ..." part is to fail travis, it passes silently on error without
+    - ./rector.phar -vvv
 
 notifications:
     email: false

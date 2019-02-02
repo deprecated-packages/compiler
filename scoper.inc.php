@@ -1,8 +1,11 @@
 <?php declare(strict_types=1);
 
 // @see https://github.com/humbug/php-scoper
-// require_once __DIR__ . '/vendor/autoload.php';
-// use Isolated\Symfony\Component\Finder\Finder;
+
+// this file will be copied 2 dirs in, so ../../ is needed to get back to root
+use Nette\Utils\Strings;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 return [
     'prefix' => null,
@@ -17,6 +20,15 @@ return [
             }
 
             return str_replace('__DIR__ . \'/..', '\'phar://rector.phar', $content);
+        },
+
+        // remove Safe\function prefix, since it breaks autoload
+        function (string $filePath, string $prefix, string $content): string {
+            if (! in_array($filePath, ['bin/bootstrap.php', 'bin/container.php'])) {
+                return $content;
+            }
+
+            return str_replace("__DIR__ . '/..", "'phar://rector.phar", $content);
         },
 
         // change vendor import "packages/NodeTypeResolver/config/config.yml" to phar path

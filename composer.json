@@ -11,11 +11,11 @@
         "symfony/dependency-injection": "^4.2",
         "symfony/http-kernel": "^4.2",
         "symfony/process": "^4.2",
-        "symplify/package-builder": "^5.3"
+        "symplify/package-builder": "^5.4"
     },
     "require-dev": {
         "phpstan/phpstan": "^0.11.1",
-        "symplify/easy-coding-standard": "^5.3",
+        "symplify/easy-coding-standard": "^5.4",
         "tracy/tracy": "^2.5"
     },
     "autoload": {
