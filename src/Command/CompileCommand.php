@@ -75,8 +75,8 @@ final class CompileCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->prepareSource($input);
-//        $this->buildPrefixedPhar();
+//        $this->prepareSource($input);
+        $this->buildPrefixedPhar();
 
         $this->symfonyStyle->success('Done!');
 
