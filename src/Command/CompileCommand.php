@@ -76,7 +76,7 @@ final class CompileCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->prepareSource($input);
-        $this->buildPrefixedPhar();
+//        $this->buildPrefixedPhar();
 
         $this->symfonyStyle->success('Done!');
 
@@ -125,6 +125,9 @@ final class CompileCommand extends Command
         if ($this->symfonyStyle->isDebug()) {
             $boxCommand[] = '--debug';
         }
+
+        // fighting memory leak crashes: https://github.com/humbug/box/issues/355#issuecomment-460055089
+        $boxCommand[] = '--no-parallel';
 
         $this->processRunner->run($boxCommand);
     }
