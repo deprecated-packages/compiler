@@ -75,21 +75,12 @@ final class CompileCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->prepareSource($input);
+//        $this->prepareSource($input);
         $this->buildPrefixedPhar();
 
-        $this->symfonyStyle->success('Rector was compiled to "tmp/rector.phar"');
+        $this->symfonyStyle->success('Done!');
 
         return ShellCode::SUCCESS;
-    }
-
-    protected function prepareBuildDirectory(): void
-    {
-        if ($this->filesystem->exists($this->buildDirectory)) {
-            $this->filesystem->remove($this->buildDirectory);
-        }
-
-        $this->filesystem->mkdir($this->buildDirectory);
     }
 
     private function prepareSource(InputInterface $input): void
@@ -101,13 +92,18 @@ final class CompileCommand extends Command
 
         $this->symfonyStyle->section(sprintf('Building prefixed in "%s" directory', $this->buildDirectory));
 
-        $this->symfonyStyle->note(sprintf('Cloning %s with version %s', $this->buildDirectory, $version));
+        $this->symfonyStyle->note(sprintf('Cloning "%s" with version "%s"', $this->buildDirectory, $version));
         $this->processRunner->run(['git', 'clone', $this->repositoryUrl, '.'], $this->buildDirectory);
         $this->processRunner->run(['git', 'checkout', '--force', $version], $this->buildDirectory);
 
+        // remove tests files and other rubish
+        $this->processRunner->run(
+            ['composer', 'require', '--no-update', 'dg/composer-cleaner:^2.0'],
+            $this->buildDirectory
+        );
+
         // runs on composer update bellow - see https://github.com/dg/composer-cleaner
         $this->symfonyStyle->note('Preparing composer.json');
-
         $this->composerJsonCleaner->clean($this->buildDirectory . '/composer.json');
 
         // needed, /vendor is missing without this
@@ -125,11 +121,23 @@ final class CompileCommand extends Command
         $this->processRunner->run(['cp', 'box.json', $this->buildDirectory . '/box.json']);
 
         $this->symfonyStyle->note('Building prefixed rector.phar');
-        $boxCommand = ['vendor/bin/box', 'compile', '--config', 'box.json', '--working-dir', $this->buildDirectory];
+        $boxCommand = ['php', 'box.phar', 'compile', '--working-dir', $this->buildDirectory];
         if ($this->symfonyStyle->isDebug()) {
             $boxCommand[] = '--debug';
         }
 
+        // fighting memory leak crashes: https://github.com/humbug/box/issues/355#issuecomment-460055089
+        $boxCommand[] = '--no-parallel';
+
         $this->processRunner->run($boxCommand);
+    }
+
+    private function prepareBuildDirectory(): void
+    {
+        if ($this->filesystem->exists($this->buildDirectory)) {
+            $this->filesystem->remove($this->buildDirectory);
+        }
+
+        $this->filesystem->mkdir($this->buildDirectory);
     }
 }

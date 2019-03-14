@@ -8,10 +8,6 @@ use Symfony\Component\Console\Application;
 
 $kernel = new PrefixerKernel();
 $kernel->boot();
-
-// this is require to keep CLI verbosity independent on AppKernel dev/prod mode
-putenv('SHELL_VERBOSITY=0');
-
 $container = $kernel->getContainer();
 
 $application = $container->get(Application::class);

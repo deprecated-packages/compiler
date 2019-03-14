@@ -1,8 +1,9 @@
 {
+    "banner": false,
     "compactors": [
         "KevinGH\\Box\\Compactor\\PhpScoper"
     ],
-    "output": "rector.phar",
+    "check-requirements": false,
     "directories": [
         "bin",
         "config",
@@ -10,5 +11,6 @@
         "src",
         "vendor"
     ],
-    "php-scoper": "../../scoper.inc.php"
+    "php-scoper": "../../scoper.inc.php",
+    "output": "../../rector.phar"
 }
