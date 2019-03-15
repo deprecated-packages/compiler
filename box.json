@@ -12,5 +12,6 @@
         "vendor"
     ],
     "php-scoper": "../../scoper.inc.php",
-    "output": "../../rector.phar"
+    "output": "../../rector.phar",
+    "compression": "GZ"
 }

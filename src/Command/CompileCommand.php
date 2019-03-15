@@ -75,7 +75,7 @@ final class CompileCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-//        $this->prepareSource($input);
+        $this->prepareSource($input);
         $this->buildPrefixedPhar();
 
         $this->symfonyStyle->success('Done!');
@@ -96,13 +96,6 @@ final class CompileCommand extends Command
         $this->processRunner->run(['git', 'clone', $this->repositoryUrl, '.'], $this->buildDirectory);
         $this->processRunner->run(['git', 'checkout', '--force', $version], $this->buildDirectory);
 
-        // remove tests files and other rubish
-        $this->processRunner->run(
-            ['composer', 'require', '--no-update', 'dg/composer-cleaner:^2.0'],
-            $this->buildDirectory
-        );
-
-        // runs on composer update bellow - see https://github.com/dg/composer-cleaner
         $this->symfonyStyle->note('Preparing composer.json');
         $this->composerJsonCleaner->clean($this->buildDirectory . '/composer.json');
 
